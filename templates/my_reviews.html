@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Reviews</h2>
+
+<ul class="list-group">
+  {% for r in reviews %}
+    <li class="list-group-item">
+      <strong>{{ r["movie_title"] }}</strong><br>
+      Rating: {{ r["rating"] }}/10<br>
+      {{ r["review_text"] }}
+    </li>
+  {% else %}
+    <li class="list-group-item">You have not written any reviews yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

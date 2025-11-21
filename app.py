@@ -89,6 +89,23 @@ def all_reviews():
     """)
     return render_template("reviews.html", reviews=rows)
 
+@app.route("/my-reviews")
+def my_reviews():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    rows = query_db("""
+        SELECT Reviews.review_id,
+               Reviews.rating,
+               Reviews.review_text,
+               Reviews.created_at,
+               Movies.title AS movie_title
+        FROM Reviews
+        JOIN Movies ON Reviews.movie_id = Movies.movie_id
+        WHERE Reviews.user_id = ?
+        ORDER BY Reviews.created_at DESC
+    """, (session["user_id"],))
+    return render_template("my_reviews.html", reviews=rows)
 
 
 @app.route("/logout")
