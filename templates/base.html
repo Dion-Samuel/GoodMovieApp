@@ -11,7 +11,9 @@
 <body class="bg-light">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{{ url_for('movies') }}">GoodMovie</a>
+<a class="navbar-brand" href="{{ url_for('movies') }}">GoodMovie</a>
+<a class="nav-link text-light" href="{{ url_for('all_reviews') }}">Reviews</a>
+
     <div class="d-flex">
       {% if session.get('username') %}
         <span class="navbar-text me-3">Hi, {{ session['username'] }}</span>

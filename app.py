@@ -75,6 +75,21 @@ def login():
 
     return render_template("login.html")
 
+@app.route("/reviews")
+def all_reviews():
+    rows = query_db("""
+        SELECT Reviews.review_id,
+               Reviews.rating,
+               Reviews.review_text,
+               Reviews.created_at,
+               Movies.title AS movie_title
+        FROM Reviews
+        JOIN Movies ON Reviews.movie_id = Movies.movie_id
+        ORDER BY Reviews.created_at DESC
+    """)
+    return render_template("reviews.html", reviews=rows)
+
+
 
 @app.route("/logout")
 def logout():
