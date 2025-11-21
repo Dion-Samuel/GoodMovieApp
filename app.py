@@ -86,8 +86,17 @@ def logout():
 
 @app.route("/movies")
 def movies():
-    rows = query_db("SELECT movie_id, title, release_year FROM Movies")
-    return render_template("movies.html", movies=rows)
+    q = request.args.get("q", "").strip()
+
+    if q:
+        rows = query_db(
+            "SELECT movie_id, title, release_year FROM Movies WHERE title LIKE ?",
+            (f"%{q}%",)
+        )
+    else:
+        rows = query_db("SELECT movie_id, title, release_year FROM Movies")
+
+    return render_template("movies.html", movies=rows, q=q)
 
 
 @app.route("/movies/<int:movie_id>")

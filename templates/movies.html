@@ -2,6 +2,17 @@
 {% block content %}
 <h2>Movies</h2>
 
+<h2>Movies</h2>
+
+<form method="get" class="mb-3">
+  <div class="input-group" style="max-width: 400px;">
+    <input type="text" name="q" class="form-control" placeholder="Search by title"
+           value="{{ q or '' }}">
+    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  </div>
+</form>
+
+
 <table class="table table-striped">
   <thead>
     <tr>
