@@ -13,6 +13,16 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+def query_db(sql, params=(), one=False):
+    conn = get_db()
+    cur = conn.execute(sql, params)
+    rows = cur.fetchall()
+    conn.close()
+    if one:
+        return rows[0] if rows else None
+    return rows
+
+
 
 # -----------------------------------------
 # Routes
@@ -76,9 +86,7 @@ def logout():
 
 @app.route("/movies")
 def movies():
-    conn = get_db()
-    rows = conn.execute("SELECT movie_id, title, release_year FROM Movies").fetchall()
-    conn.close()
+    rows = query_db("SELECT movie_id, title, release_year FROM Movies")
     return render_template("movies.html", movies=rows)
 
 
