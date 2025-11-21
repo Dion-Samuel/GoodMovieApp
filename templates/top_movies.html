@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Top Rated Movies</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Average Rating</th>
+      <th>Review Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in movies %}
+      <tr>
+        <td>{{ m["title"] }}</td>
+        <td>{{ "%.1f" | format(m["avg_rating"]) }}</td>
+        <td>{{ m["review_count"] }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

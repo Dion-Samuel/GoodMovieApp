@@ -161,6 +161,21 @@ def movies():
 
     return render_template("movies.html", movies=rows, q=q, genres=genres, genre_id=genre_id)
 
+@app.route("/top-movies")
+def top_movies():
+    rows = query_db("""
+        SELECT m.movie_id,
+               m.title,
+               AVG(r.rating) AS avg_rating,
+               COUNT(r.review_id) AS review_count
+        FROM Movies m
+        JOIN Reviews r ON m.movie_id = r.movie_id
+        GROUP BY m.movie_id, m.title
+        ORDER BY avg_rating DESC
+        LIMIT 5
+    """)
+    return render_template("top_movies.html", movies=rows)
+
 
 @app.route("/movies/<int:movie_id>")
 def movie_detail(movie_id):
