@@ -137,16 +137,29 @@ def logout():
 @app.route("/movies")
 def movies():
     q = request.args.get("q", "").strip()
+    genre_id = request.args.get("genre_id", "").strip()  # from dropdown
+
+    base_sql = """
+        SELECT DISTINCT m.movie_id, m.title, m.release_year
+        FROM Movies m
+        LEFT JOIN MovieGenres mg ON m.movie_id = mg.movie_id
+        WHERE 1=1
+    """
+    params = []
 
     if q:
-        rows = query_db(
-            "SELECT movie_id, title, release_year FROM Movies WHERE title LIKE ?",
-            (f"%{q}%",)
-        )
-    else:
-        rows = query_db("SELECT movie_id, title, release_year FROM Movies")
+        base_sql += " AND m.title LIKE ?"
+        params.append(f"%{q}%")
 
-    return render_template("movies.html", movies=rows, q=q)
+    if genre_id:
+        base_sql += " AND mg.genre_id = ?"
+        params.append(genre_id)
+
+    rows = query_db(base_sql, params)
+
+    genres = query_db("SELECT genre_id, name FROM Genres ORDER BY name")
+
+    return render_template("movies.html", movies=rows, q=q, genres=genres, genre_id=genre_id)
 
 
 @app.route("/movies/<int:movie_id>")

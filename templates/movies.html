@@ -5,12 +5,28 @@
 <h2>Movies</h2>
 
 <form method="get" class="mb-3">
-  <div class="input-group" style="max-width: 400px;">
-    <input type="text" name="q" class="form-control" placeholder="Search by title"
-           value="{{ q or '' }}">
-    <button class="btn btn-outline-secondary" type="submit">Search</button>
+  <div class="row g-2" style="max-width: 700px;">
+    <div class="col-md-6">
+      <input type="text" name="q" class="form-control"
+             placeholder="Search by title" value="{{ q or '' }}">
+    </div>
+    <div class="col-md-4">
+      <select name="genre_id" class="form-select">
+        <option value="">All genres</option>
+        {% for g in genres %}
+          <option value="{{ g['genre_id'] }}"
+            {% if genre_id and genre_id|int == g['genre_id'] %}selected{% endif %}>
+            {{ g["name"] }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-secondary w-100" type="submit">Filter</button>
+    </div>
   </div>
 </form>
+
 
 
 <table class="table table-striped">
