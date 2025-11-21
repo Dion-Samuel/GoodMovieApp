@@ -77,7 +77,8 @@ def login():
 
 @app.route("/reviews")
 def all_reviews():
-    rows = query_db("""
+    conn = get_db()
+    rows = conn.execute("""
         SELECT Reviews.review_id,
                Reviews.rating,
                Reviews.review_text,
@@ -86,8 +87,10 @@ def all_reviews():
         FROM Reviews
         JOIN Movies ON Reviews.movie_id = Movies.movie_id
         ORDER BY Reviews.created_at DESC
-    """)
+    """).fetchall()
+    conn.close()
     return render_template("reviews.html", reviews=rows)
+
 
 @app.route("/api/movies-with-ratings")
 def api_movies_with_ratings():
