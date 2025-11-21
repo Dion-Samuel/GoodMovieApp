@@ -197,6 +197,10 @@ def delete_review(review_id):
 
     return redirect(url_for("my_reviews"))
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template("404.html"), 404
+
 
 @app.route("/movies/<int:movie_id>")
 def movie_detail(movie_id):
