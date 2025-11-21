@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
 
 app = Flask(__name__)
@@ -88,6 +88,21 @@ def all_reviews():
         ORDER BY Reviews.created_at DESC
     """)
     return render_template("reviews.html", reviews=rows)
+
+@app.route("/api/movies-with-ratings")
+def api_movies_with_ratings():
+    rows = query_db("""
+        SELECT Movies.title,
+               AVG(Reviews.rating) AS avg_rating
+        FROM Movies
+        LEFT JOIN Reviews ON Movies.movie_id = Reviews.movie_id
+        GROUP BY Movies.movie_id
+    """)
+    data = [
+        {"title": r["title"], "avg_rating": r["avg_rating"]}
+        for r in rows
+    ]
+    return jsonify(data)
 
 @app.route("/my-reviews")
 def my_reviews():
