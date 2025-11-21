@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Movies</h2>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Year</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in movies %}
+      <tr>
+        <td>{{ m["title"] }}</td>
+        <td>{{ m["release_year"] }}</td>
+        <td>
+          <a class="btn btn-sm btn-secondary"
+             href="{{ url_for('movie_detail', movie_id=m['movie_id']) }}">
+            View
+          </a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a href="{{ url_for('stats') }}" class="btn btn-outline-primary">View Stats</a>
+{% endblock %}

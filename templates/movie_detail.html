@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ movie["title"] }} ({{ movie["release_year"] }})</h2>
+
+<p><strong>Language:</strong> {{ movie["language"] }}</p>
+<p>{{ movie["description"] }}</p>
+
+<hr>
+<h4>Reviews</h4>
+
+<ul class="list-group mb-3">
+  {% for r in reviews %}
+    <li class="list-group-item">
+      <strong>Rating:</strong> {{ r["rating"] }}/10<br>
+      {{ r["review_text"] }}
+    </li>
+  {% else %}
+    <li class="list-group-item">No reviews yet.</li>
+  {% endfor %}
+</ul>
+
+{% if session.get("user_id") %}
+<h5>Add a review</h5>
+<form method="post" action="{{ url_for('add_review', movie_id=movie['movie_id']) }}">
+  <div class="mb-3">
+    <label class="form-label">Rating (1–10)</label>
+    <input name="rating" type="number" min="1" max="10" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Review</label>
+    <textarea name="review_text" class="form-control"></textarea>
+  </div>
+  <button class="btn btn-primary">Submit Review</button>
+</form>
+{% else %}
+<p><a href="{{ url_for('login') }}">Log in</a> to add a review.</p>
+{% endif %}
+{% endblock %}

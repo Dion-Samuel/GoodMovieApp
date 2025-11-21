@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Average Rating by Movie</h2>
+
+<canvas id="ratingChart" style="max-width: 600px;"></canvas>
+
+<table class="table table-striped mt-4">
+  <thead>
+    <tr>
+      <th>Movie</th>
+      <th>Average Rating</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in data %}
+      <tr>
+        <td>{{ row["title"] }}</td>
+        <td>{{ "%.1f" | format(row["avg_rating"]) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const labels = [
+    {% for row in data %}
+      "{{ row['title'] }}",
+    {% endfor %}
+  ];
+  const values = [
+    {% for row in data %}
+      {{ row['avg_rating'] }},
+    {% endfor %}
+  ];
+
+  const ctx = document.getElementById('ratingChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Avg Rating',
+        data: values
+      }]
+    },
+    options: {
+      scales: {
+        y: { beginAtZero: true, suggestedMax: 10 }
+      }
+    }
+  });
+</script>
+{% endblock %}
