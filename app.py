@@ -176,6 +176,27 @@ def top_movies():
     """)
     return render_template("top_movies.html", movies=rows)
 
+@app.route("/reviews/<int:review_id>/delete", methods=["POST"])
+def delete_review(review_id):
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    conn = get_db()
+    review = conn.execute(
+        "SELECT review_id, user_id FROM Reviews WHERE review_id=?",
+        (review_id,)
+    ).fetchone()
+
+    if not review or review["user_id"] != session["user_id"]:
+        conn.close()
+        return "Not allowed to delete this review.", 403
+
+    conn.execute("DELETE FROM Reviews WHERE review_id=?", (review_id,))
+    conn.commit()
+    conn.close()
+
+    return redirect(url_for("my_reviews"))
+
 
 @app.route("/movies/<int:movie_id>")
 def movie_detail(movie_id):

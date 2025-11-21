@@ -5,10 +5,16 @@
 <ul class="list-group">
   {% for r in reviews %}
     <li class="list-group-item">
-      <strong>{{ r["movie_title"] }}</strong><br>
-      Rating: {{ r["rating"] }}/10<br>
-      {{ r["review_text"] }}
-    </li>
+  <strong>{{ r["movie_title"] }}</strong><br>
+  Rating: {{ r["rating"] }}/10<br>
+  {{ r["review_text"] }}
+  <form method="post"
+        action="{{ url_for('delete_review', review_id=r['review_id']) }}"
+        style="display:inline-block; float:right;">
+    <button class="btn btn-sm btn-danger">Delete</button>
+  </form>
+</li>
+
   {% else %}
     <li class="list-group-item">You have not written any reviews yet.</li>
   {% endfor %}
